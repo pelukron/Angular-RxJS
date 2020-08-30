@@ -4,7 +4,7 @@ import { EMPTY, Observable } from 'rxjs';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   templateUrl: './product-list.component.html',
@@ -18,6 +18,13 @@ export class ProductListComponent {
 
   products$: Observable<Product[]> = this.productService.products$
     .pipe(
+      map(products =>
+        products.map(product => ({
+          ...product,
+          price: product.price * 1.5,
+          searchKey: [product.productName]
+        }) as Product)
+      ),
       catchError(err => {
         this.errorMessage = err
         return EMPTY;
