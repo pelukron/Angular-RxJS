@@ -16,15 +16,8 @@ export class ProductListComponent {
   errorMessage = '';
   categories;
 
-  products$: Observable<Product[]> = this.productService.products$
+  products$: Observable<Product[]> = this.productService.productWithCategories$
     .pipe(
-      map(products =>
-        products.map(product => ({
-          ...product,
-          price: product.price * 1.5,
-          searchKey: [product.productName]
-        }) as Product)
-      ),
       catchError(err => {
         this.errorMessage = err
         return EMPTY;
